@@ -83,7 +83,7 @@ public class UsuarioCRUD {
     private void guardarEnArchivo(){
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Usuario u: listaUsuarios){
-                bw.write(u.getNombre() + ";" + u.getTipoDocumento() + ";" + 
+                bw.write(u.getNombre() + ";" + 
                         u.getTelefono() + ";" + u.getTipoDocumento()+ ";" + 
                         u.getCarnetBiblioteca() + ";" + u.isSuscripcionActiva());
                 bw.newLine();

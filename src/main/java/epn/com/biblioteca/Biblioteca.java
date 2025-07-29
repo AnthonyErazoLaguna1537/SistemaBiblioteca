@@ -113,7 +113,14 @@ public class Biblioteca {
         return libros;
     }
 
-    
+    public void setPersonas(ArrayList<Persona> personas) {
+        this.personas = personas;
+    }
+
+    public void setLibros(ArrayList<Libro> libros) {
+        this.libros = libros;
+    }
+
 
     @Override
     public String toString() {
