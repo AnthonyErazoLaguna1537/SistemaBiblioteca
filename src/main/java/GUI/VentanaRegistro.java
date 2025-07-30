@@ -4,12 +4,15 @@
  */
 package GUI;
 
+import ManejoDeArchivos.AccesoCRUD;
+import ManejoDeArchivos.BibliotecarioCRUD;
 import ManejoDeArchivos.UsuarioCRUD;
 import epn.com.biblioteca.Acceso;
 import epn.com.biblioteca.Bibliotecario;
 import epn.com.biblioteca.Usuario;
 import java.awt.CardLayout;
 import java.awt.Panel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,6 +20,8 @@ import java.awt.Panel;
  */
 public class VentanaRegistro extends javax.swing.JDialog {
     private UsuarioCRUD usuarioCRUD = new UsuarioCRUD(); 
+    private BibliotecarioCRUD bibliotecarioCRUD = new BibliotecarioCRUD(); 
+    private AccesoCRUD accesoCRUD = new AccesoCRUD();
     /**
      * Creates new form VentanaRegistro
      */
@@ -45,15 +50,17 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTAreaTrabajo = new javax.swing.JTextField();
         jTSalario = new javax.swing.JTextField();
-        jTHorario = new javax.swing.JTextField();
+        jCAreasTrabajo = new javax.swing.JComboBox<>();
+        jCHorarios = new javax.swing.JComboBox<>();
         jPanelUsuario = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jCTipoDocumento = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         jRSiSub = new javax.swing.JRadioButton();
         jRNoSub = new javax.swing.JRadioButton();
+        jLabel12 = new javax.swing.JLabel();
+        jTTipoDocumento = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -86,6 +93,10 @@ public class VentanaRegistro extends javax.swing.JDialog {
 
         jLabel9.setText("Horario");
 
+        jCAreasTrabajo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Recepción", "Busqued", "Prestamos y devoluciones", "Procesos tecnicos" }));
+
+        jCHorarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matutino", "Vespertino", "Turno Completo" }));
+
         javax.swing.GroupLayout jPanelBibliotecarioLayout = new javax.swing.GroupLayout(jPanelBibliotecario);
         jPanelBibliotecario.setLayout(jPanelBibliotecarioLayout);
         jPanelBibliotecarioLayout.setHorizontalGroup(
@@ -96,12 +107,11 @@ public class VentanaRegistro extends javax.swing.JDialog {
                     .addComponent(jLabel7)
                     .addComponent(jLabel9)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTAreaTrabajo)
-                        .addComponent(jTSalario, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
-                    .addComponent(jTHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTSalario)
+                    .addComponent(jCAreasTrabajo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCHorarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16))
         );
         jPanelBibliotecarioLayout.setVerticalGroup(
@@ -110,15 +120,15 @@ public class VentanaRegistro extends javax.swing.JDialog {
                 .addGap(14, 14, 14)
                 .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTAreaTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCAreasTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jTSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9)
-                    .addComponent(jTHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -138,23 +148,28 @@ public class VentanaRegistro extends javax.swing.JDialog {
         bGSub.add(jRNoSub);
         jRNoSub.setText("No");
 
+        jLabel12.setText("Digite el tipo de documento");
+
         javax.swing.GroupLayout jPanelUsuarioLayout = new javax.swing.GroupLayout(jPanelUsuario);
         jPanelUsuario.setLayout(jPanelUsuarioLayout);
         jPanelUsuarioLayout.setHorizontalGroup(
             jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelUsuarioLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addGap(67, 67, 67)
-                .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel12)))
+                .addGap(23, 23, 23)
+                .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelUsuarioLayout.createSequentialGroup()
                         .addComponent(jRSiSub)
-                        .addGap(35, 35, 35)
+                        .addGap(18, 18, 18)
                         .addComponent(jRNoSub))
-                    .addComponent(jCTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(jCTipoDocumento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTTipoDocumento))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanelUsuarioLayout.setVerticalGroup(
             jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,10 +180,18 @@ public class VentanaRegistro extends javax.swing.JDialog {
                     .addComponent(jCTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jRSiSub)
-                    .addComponent(jRNoSub))
-                .addContainerGap(78, Short.MAX_VALUE))
+                    .addComponent(jLabel12)
+                    .addComponent(jTTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRSiSub)
+                            .addComponent(jRNoSub)))
+                    .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11)))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         jPPanelCambiante.add(jPanelUsuario, "Usuario");
@@ -287,25 +310,43 @@ public class VentanaRegistro extends javax.swing.JDialog {
         String usuarioRegistro = jTUsuarioRegistro.getText(); 
         String contrasena = new String(jPContraRegistro.getPassword());
         Acceso acceso = new Acceso(usuarioRegistro, contrasena);
-        
+        accesoCRUD.agregarAcceso(acceso);
         String rol = (String) jRol.getSelectedItem(); 
         
         if("Usuario".equals(rol)){
             String tipoDocumento = (String) jCTipoDocumento.getSelectedItem(); 
+            String documentoDigito = jTTipoDocumento.getText(); 
             boolean subActiva; 
             if (jRSiSub.isSelected()){
                 subActiva = true; 
             } else {
                 subActiva = false; 
             }
-            Usuario usuarioNuevo = new Usuario(nombre, telefono, acceso, tipoDocumento, tipoDocumento, subActiva);
+            Usuario usuarioNuevo = new Usuario(nombre, telefono, acceso, tipoDocumento, documentoDigito, subActiva);
             usuarioCRUD.agregarUsuario(usuarioNuevo);
+            JOptionPane.showMessageDialog(null, "Usuario registrado con existo", "Exito en el registro",1);
         } else if ("Bibliotecario".equals(rol)){
-            String areaTrabajo = jTAreaTrabajo.getText(); 
-            Double salario = Double.parseDouble(jTSalario.getText()); 
-            String horario = jTHorario.getText(); 
-            
+            String areaTrabajo = (String) jCAreasTrabajo.getSelectedItem();
+            Double salario = Double.valueOf(jTSalario.getText()); 
+            String horario = (String) jCHorarios.getSelectedItem();
+            Bibliotecario biblio = new Bibliotecario(nombre, telefono, acceso, areaTrabajo, salario, horario);
+            bibliotecarioCRUD.agregarBiblitecario(biblio);
+            JOptionPane.showMessageDialog(null, "Bibliotecario registrado con existo", "Exito en el registro",1);
+
         }
+        
+        
+        jTNombre.setText("");
+        jTTelefono.setText("");
+        jTUsuarioRegistro.setText("");
+        jPContraRegistro.setText("");
+        jRol.setSelectedIndex(0);
+        jCTipoDocumento.setSelectedIndex(0);
+        jRSiSub.setSelected(false);
+        jRNoSub.setSelected(false);
+        jCAreasTrabajo.setSelectedIndex(0);
+        jCHorarios.setSelectedIndex(0);
+        jTSalario.setText("");
         
     }//GEN-LAST:event_jBRegistrarActionPerformed
 
@@ -354,10 +395,13 @@ public class VentanaRegistro extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bGSub;
     private javax.swing.JButton jBRegistrar;
+    private javax.swing.JComboBox<String> jCAreasTrabajo;
+    private javax.swing.JComboBox<String> jCHorarios;
     private javax.swing.JComboBox<String> jCTipoDocumento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -374,11 +418,10 @@ public class VentanaRegistro extends javax.swing.JDialog {
     private javax.swing.JRadioButton jRNoSub;
     private javax.swing.JRadioButton jRSiSub;
     private javax.swing.JComboBox<String> jRol;
-    private javax.swing.JTextField jTAreaTrabajo;
-    private javax.swing.JTextField jTHorario;
     private javax.swing.JTextField jTNombre;
     private javax.swing.JTextField jTSalario;
     private javax.swing.JTextField jTTelefono;
+    private javax.swing.JTextField jTTipoDocumento;
     private javax.swing.JTextField jTUsuarioRegistro;
     // End of variables declaration//GEN-END:variables
 }

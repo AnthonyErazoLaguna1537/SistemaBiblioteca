@@ -87,7 +87,7 @@ public class LibroCRUD {
     
     private void cargarDesdeArchivo(){
         File file = new File(archivo);
-        if (file.exists()){
+        if (!file.exists()) return; 
             try (BufferedReader br = new BufferedReader(new FileReader(file))){
                 String linea; 
                 while ((linea = br.readLine()) != null) {
@@ -104,7 +104,7 @@ public class LibroCRUD {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Error al cargar el archivo", "Error en el arhivo", 0);
             }
-        }
+        
     }
 
    

@@ -5,6 +5,11 @@
 package GUI;
 
 import ManejoDeArchivos.AccesoCRUD;
+import ManejoDeArchivos.BibliotecaCRUD;
+import ManejoDeArchivos.BibliotecarioCRUD;
+import ManejoDeArchivos.UsuarioCRUD;
+import epn.com.biblioteca.Bibliotecario;
+import epn.com.biblioteca.Usuario;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -33,8 +38,6 @@ public class InicioSesion extends javax.swing.JFrame {
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jBIniciarSesion = new javax.swing.JButton();
@@ -54,10 +57,6 @@ public class InicioSesion extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Inicio de sesión");
-
-        jLabel3.setText("Modo");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bibliotecario", "Usuario" }));
 
         jLabel4.setText("Usuario");
 
@@ -93,22 +92,19 @@ public class InicioSesion extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jTUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jLabel5))
+                                    .addComponent(jLabel5)
                                     .addGap(83, 83, 83)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jComboBox1, 0, 120, Short.MAX_VALUE)
-                                        .addComponent(jPContrasena)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jPContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBIniciarSesion)
+                                .addGap(18, 18, 18)
+                                .addComponent(jBRegistrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBSalir)))
+                        .addContainerGap(52, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBIniciarSesion)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBRegistrar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBSalir)
-                        .addGap(0, 46, Short.MAX_VALUE))))
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,23 +115,18 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBIniciarSesion)
-                            .addComponent(jBRegistrar)
-                            .addComponent(jBSalir)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
                     .addComponent(jPContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBIniciarSesion)
+                    .addComponent(jBRegistrar)
+                    .addComponent(jBSalir))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         pack();
@@ -144,15 +135,35 @@ public class InicioSesion extends javax.swing.JFrame {
     private void jBIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIniciarSesionActionPerformed
         String usuario = jTUsuario.getText(); 
         String contrasena = new String(jPContrasena.getPassword()); 
-        AccesoCRUD acceso = new AccesoCRUD(); 
-        MenuBibliotecario ventanaMenuBibliotecario = new MenuBibliotecario();
-        
-        if(acceso.validarIngreso(usuario, contrasena)){
-            ventanaMenuBibliotecario.setVisible(true);
+
+        AccesoCRUD accesoCrud = new AccesoCRUD(); 
+        UsuarioCRUD usuarioCrud = new UsuarioCRUD(); 
+        BibliotecarioCRUD biblioCrud = new BibliotecarioCRUD();
+
+        if (accesoCrud.validarIngreso(usuario, contrasena)) {
+            Usuario u = usuarioCrud.buscarPorUsuario(usuario);
+            if (u != null) {
+                JOptionPane.showMessageDialog(null, "Bienvenido " + u.getNombre());
+                MenuUsuario ventanaUsuario = new MenuUsuario(); 
+                ventanaUsuario.setVisible(true);
+                this.dispose(); // cerrar ventana de login si lo deseas
+                return;
+            }   
+
+        Bibliotecario b = biblioCrud.buscarPorUsuario(usuario); 
+        if (b != null) {
+            JOptionPane.showMessageDialog(null, "Bienvenido " + b.getNombre());
+            MenuBibliotecario ventanaBiblio = new MenuBibliotecario(); 
+            ventanaBiblio.setVisible(true);
             this.dispose();
-        } else{
-            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectas", "Error en las credenciales", 0);
+            return;
         }
+
+        // Si llega aquí, es que validó el acceso pero no encontró el perfil
+        JOptionPane.showMessageDialog(null, "No se encontró el perfil asociado.");
+    } else {
+        JOptionPane.showMessageDialog(null, "Credenciales incorrectas.");
+    }
     }//GEN-LAST:event_jBIniciarSesionActionPerformed
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed
@@ -200,11 +211,9 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JButton jBIniciarSesion;
     private javax.swing.JButton jBRegistrar;
     private javax.swing.JButton jBSalir;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField jPContrasena;

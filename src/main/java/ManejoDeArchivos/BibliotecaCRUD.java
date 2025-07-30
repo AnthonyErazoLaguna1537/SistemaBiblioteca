@@ -33,7 +33,7 @@ public class BibliotecaCRUD {
         this.edificioCrud = edificioCrud;
         listaBibliotecas = new ArrayList<>(); 
         crearCarpeta(); 
-        guardarEnArchivo(); 
+        cargarDesdeArchivo(); 
     }
     
     private void crearCarpeta(){
@@ -109,7 +109,7 @@ public class BibliotecaCRUD {
     
     private void cargarDesdeArchivo(){
             File file = new File(archivo); 
-            if (file.exists()){
+            if (!file.exists()) return; 
                 try  (BufferedReader br = new BufferedReader(new FileReader(file))) {
                     String linea; 
                     while ((linea = br.readLine()) != null){
@@ -122,8 +122,8 @@ public class BibliotecaCRUD {
                             
                             Edificio edificio = edificioCrud.buscarPorDireccion(dirEdificio); 
                             Biblioteca b = new Biblioteca(nombre, tipo, direccion, edificio); 
-                            b.setLibros(cargarLibros(nombre));
-                            b.setPersonas(cargarPersonas (nombre));
+                            b.setLibros((ArrayList<Libro>) cargarLibros(nombre));
+                            b.setPersonas((ArrayList<Persona>) cargarPersonas(nombre));
                         }
                                 
                     }
@@ -131,7 +131,7 @@ public class BibliotecaCRUD {
                     JOptionPane.showMessageDialog(null, "Error al cargar las personas", "Error de cargado", 0);
 
                 }
-            }
+            
         }
     
     private List <Libro> cargarLibros (String nombreBib){
@@ -167,9 +167,20 @@ public class BibliotecaCRUD {
         if (!file.exists()) return personas; 
         
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String linea
+            String linea;
+            while((linea = br.readLine()) != null){
+                String partes[] = linea.split(";");
+                if (partes [0].equals("Usuario") && partes.length == 5 ){
+                    personas.add(new Usuario(partes [1], partes [2], null, partes [4], partes[3], true)); 
+                } else if (partes[0].equals("Bibliotecario") && partes.length == 5){
+                    personas.add(new Bibliotecario(partes [1], partes [2], null, partes [3], 0, partes[4])); 
+                }
+            }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar las personas", "Error de cargado", 0);
         }
+        
+        return personas; 
     }
     
 }

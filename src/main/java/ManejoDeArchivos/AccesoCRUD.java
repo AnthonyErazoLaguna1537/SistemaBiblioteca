@@ -103,7 +103,7 @@ public class AccesoCRUD {
 
     private void cargarDesdeArchivo() {
         File file = new File(archivo); 
-        if (file.exists()){
+        if (!file.exists()) return; 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String linea; 
                 while ((linea = br.readLine()) != null){
@@ -117,7 +117,6 @@ public class AccesoCRUD {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error al cargar el archivo", "Error de carga", 0);
             }
-        }
         
     }
     

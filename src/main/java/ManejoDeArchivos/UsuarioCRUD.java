@@ -4,6 +4,7 @@
  */
 package ManejoDeArchivos;
 
+import epn.com.biblioteca.Acceso;
 import epn.com.biblioteca.Usuario;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,6 +41,14 @@ public class UsuarioCRUD {
         }
     }
     
+    public Usuario buscarPorUsuario (String usuario){
+        for (Usuario u : listaUsuarios){
+            if (u.getAcceso().getUsuario().equals(usuario)){
+                return u;
+            }
+        }
+        return null; 
+    }
     public void agregarUsuario(Usuario usuario){
         listaUsuarios.add(usuario); 
         guardarEnArchivo(); 
@@ -83,9 +92,9 @@ public class UsuarioCRUD {
     private void guardarEnArchivo(){
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Usuario u: listaUsuarios){
-                bw.write(u.getNombre() + ";" + 
-                        u.getTelefono() + ";" + u.getTipoDocumento()+ ";" + 
-                        u.getCarnetBiblioteca() + ";" + u.isSuscripcionActiva());
+                bw.write(u.getNombre() + ";" + u.getTelefono()+ ";" + u.getAcceso().getUsuario() + ";" + 
+                        u.getAcceso().getContrasena() + ";" + u.getTipoDocumento() + ";" + 
+                        u.getCarnetBiblioteca() + ";" + u.isSuscripcionActiva()); 
                 bw.newLine();
             }
         } catch (Exception e) {
@@ -95,26 +104,29 @@ public class UsuarioCRUD {
     
     private void cargarDesdeArchivo(){
         File file = new File(archivo); 
-        if (file.exists()){
+        if (!file.exists()) return; 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String linea; 
                 while ((linea = br.readLine()) != null){
                     String partes [] = linea.split(";"); 
-                    if (partes.length == 5){
+                    if (partes.length == 7){
                         String nombre = partes [0]; 
                         String telefono = partes [1];
-                        String tipoDocumento = partes [2]; 
-                        String carnetBiblioteca = partes [3]; 
-                        boolean suscipcionActiva = Boolean.parseBoolean(partes [4]); 
-                        Usuario usuario = new Usuario(nombre, telefono, null, tipoDocumento, carnetBiblioteca, suscipcionActiva); 
-                        listaUsuarios.add(usuario); 
+                        String usuario = partes [2];
+                        String contrasena = partes [3];
+                        String tipoDocumento = partes [4]; 
+                        String carnetBiblioteca = partes [5]; 
+                        boolean suscipcionActiva = Boolean.parseBoolean(partes [6]); 
+                        Acceso acceso = new Acceso(usuario, contrasena); 
+                        Usuario usuarionuevo = new Usuario(nombre, telefono, acceso, tipoDocumento, carnetBiblioteca, suscipcionActiva);
+                        listaUsuarios.add(usuarionuevo); 
                     }
                 }
                 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "No se pudo cargar el archivo", "Error en lectura", 0);
             }
-        }
+        
     }
     
     

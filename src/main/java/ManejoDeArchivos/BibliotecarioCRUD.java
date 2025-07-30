@@ -32,13 +32,13 @@ public class BibliotecarioCRUD {
     }
 
     private void crearCarpeta() {
-        File direccion = new File(archivo); 
+        File direccion = new File(carpeta); 
         if (!direccion.exists()){
             direccion.mkdir(); 
         }
     }
     
-    private void agregarBiblitecario(Bibliotecario biblio){
+    public void agregarBiblitecario(Bibliotecario biblio){
         listaBibliotecarios.add(biblio); 
         guardarEnArchivo(); 
     }
@@ -46,7 +46,14 @@ public class BibliotecarioCRUD {
     public List <Bibliotecario> listarBibliotecarios(){
         return listaBibliotecarios; 
     }
-    
+    public Bibliotecario buscarPorUsuario (String usuario){
+        for (Bibliotecario b : listaBibliotecarios){
+            if (b.getAcceso().getUsuario().equalsIgnoreCase(usuario)){
+                return b;
+            }
+        }
+        return null; 
+    }
     public Bibliotecario buscarPorTelefono(String telefono){
         for (Bibliotecario b : listaBibliotecarios){
             if (b.getTelefono().equalsIgnoreCase(telefono)){
@@ -82,7 +89,7 @@ public class BibliotecarioCRUD {
 
     private void cargarDesdeArchivo() {
         File file = new File(archivo); 
-        if (file.exists()){
+        if (!file.exists()) return; 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String linea; 
                 while ((linea = br.readLine()) != null){
@@ -104,7 +111,7 @@ public class BibliotecarioCRUD {
                 JOptionPane.showMessageDialog(null, "No se pudo guardar el leer el archivo", "Error al leer", 0);
 
             }
-        }
+      
     }
     
         

@@ -69,7 +69,7 @@ public class EdificioCRUD {
 
     private void cargarDesdeArchivo() {
         File file = new File(archivo); 
-        if (file.exists()){
+        if (!file.exists()) return; 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String linea;
                 while((linea = br.readLine()) != null){
@@ -84,6 +84,6 @@ public class EdificioCRUD {
                  JOptionPane.showMessageDialog(null, "No se pudo leer el archivo", "Error al leer", 0);
 
             }
-        }
+       
     }
 }
