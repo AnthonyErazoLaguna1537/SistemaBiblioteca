@@ -159,7 +159,6 @@ public class InicioSesion extends javax.swing.JFrame {
             return;
         }
 
-        // Si llega aquí, es que validó el acceso pero no encontró el perfil
         JOptionPane.showMessageDialog(null, "No se encontró el perfil asociado.");
     } else {
         JOptionPane.showMessageDialog(null, "Credenciales incorrectas.");

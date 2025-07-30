@@ -53,9 +53,21 @@ public class LibroCRUD {
         return listaLibros;
     }
     
+    public List <Libro> buscarPorTexto (String texto){
+        List <Libro> resultados = new ArrayList<>(); 
+        for (Libro l : listaLibros){
+            if (l.getTitulo().toLowerCase().contains(texto) || 
+                    l.getAutor().toLowerCase().contains(texto)){
+                resultados.add(l); 
+                
+            }
+        }
+        return resultados; 
+    }
+    
     public Libro buscarPorTitulo (String titulo){
         for (Libro l : listaLibros){
-            if(l.getTitulo().equalsIgnoreCase(titulo)){
+            if (l.getTitulo().equalsIgnoreCase(titulo)){
                 return l; 
             }
         }
@@ -107,10 +119,6 @@ public class LibroCRUD {
         
     }
 
-   
-    
-
-    
     public void guardarEnArchivo(){
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Libro l : listaLibros){

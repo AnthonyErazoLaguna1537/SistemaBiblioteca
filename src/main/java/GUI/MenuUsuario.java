@@ -4,18 +4,46 @@
  */
 package GUI;
 
+import ManejoDeArchivos.LibroCRUD;
+import epn.com.biblioteca.Libro;
+import epn.com.biblioteca.Usuario;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Thony
  */
 public class MenuUsuario extends javax.swing.JFrame {
-
+    private Usuario usuario = new Usuario(); 
+    private LibroCRUD librosCRUD = new LibroCRUD(); 
+    DefaultTableModel mt = new DefaultTableModel(); 
+    
     /**
      * Creates new form MenuUsuario
      */
     public MenuUsuario() {
         initComponents();
+        String ids [] = {"Titulo", "Autor", "Codigo", "Disponible"}; 
+        mt.setColumnIdentifiers(ids);
+        jTableLibros.setModel(mt);
+        
     }
+    private void cargarLibroEnTabla(List<Libro> libros) {
+    mt.setRowCount(0);
+    for (Libro l : libros) {
+        mt.addRow(new Object[]{
+            l.getTitulo(),
+            l.getAutor(),
+            l.getCodigo(),
+            l.isDisponible() ? "Sí" : "No"
+        });
+    }
+}
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,30 +55,222 @@ public class MenuUsuario extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jBBuscarLibro = new javax.swing.JButton();
+        jBMostrarPrestamos = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableLibros = new javax.swing.JTable();
+        jTBuscar = new javax.swing.JTextField();
+        jBMostrarLibros = new javax.swing.JButton();
+        jBPrestamo = new javax.swing.JButton();
+        jBDevolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(500, 400));
 
-        jLabel1.setText("Usuario");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Bienvenido");
+
+        jLabel2.setText("Buscar libros:  ");
+
+        jBBuscarLibro.setText("Buscar\n");
+        jBBuscarLibro.setActionCommand("Buscar");
+        jBBuscarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBBuscarLibroActionPerformed(evt);
+            }
+        });
+
+        jBMostrarPrestamos.setText("Mostrar Prestamos");
+        jBMostrarPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBMostrarPrestamosActionPerformed(evt);
+            }
+        });
+
+        jTableLibros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Titulo", "Autor", "Codigo", "Disponible"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableLibros);
+
+        jBMostrarLibros.setText("Mostrar Libros");
+        jBMostrarLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBMostrarLibrosActionPerformed(evt);
+            }
+        });
+
+        jBPrestamo.setText("Pedir Prestamo");
+        jBPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBPrestamoActionPerformed(evt);
+            }
+        });
+
+        jBDevolver.setText("Devolver libro");
+        jBDevolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBDevolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jLabel1)
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jBMostrarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBMostrarLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(jBPrestamo)
+                .addGap(109, 109, 109)
+                .addComponent(jBDevolver)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
+                .addGap(37, 37, 37)
                 .addComponent(jLabel1)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBBuscarLibro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBMostrarPrestamos)
+                    .addComponent(jBMostrarLibros))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBPrestamo)
+                    .addComponent(jBDevolver))
+                .addContainerGap(206, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBBuscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarLibroActionPerformed
+        String libroBuscar = jTBuscar.getText().trim().toLowerCase();
+        List <Libro> resultados = librosCRUD.buscarPorTexto(libroBuscar); 
+        if (resultados == null || resultados.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se encontraron libros");
+        } else{
+            cargarLibroEnTabla(resultados);
+        }
+       jTBuscar.setText("");
+    }//GEN-LAST:event_jBBuscarLibroActionPerformed
+
+    private void jBMostrarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMostrarLibrosActionPerformed
+       List <Libro> todos = librosCRUD.listarLibros(); 
+       if (todos.isEmpty()){
+           JOptionPane.showMessageDialog(null, "No existen libros");
+       } else{
+           cargarLibroEnTabla(todos);
+       }
+    }//GEN-LAST:event_jBMostrarLibrosActionPerformed
+
+    private void jBPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrestamoActionPerformed
+        int filaSeleccionada = jTableLibros.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro de la tabla.");
+        return;
+        }
+
+        String tituloLibro = (String) mt.getValueAt(filaSeleccionada, 0);
+        Libro libro = librosCRUD.buscarPorTitulo(tituloLibro);
+
+        if (libro == null) {
+        JOptionPane.showMessageDialog(this, "No se pudo encontrar el libro.");
+        return;
+        }
+
+    if (!libro.isDisponible()) {
+        JOptionPane.showMessageDialog(this, "Este libro ya está prestado.");
+        return;
+    }
+
+    
+    libro.setDisponible(false);
+    librosCRUD.actualizar(tituloLibro, libro); 
+    librosCRUD.guardarEnArchivo();
+    JOptionPane.showMessageDialog(this, "Préstamo realizado exitosamente.");
+    cargarLibroEnTabla(librosCRUD.listarLibros());
+    }//GEN-LAST:event_jBPrestamoActionPerformed
+
+    private void jBDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDevolverActionPerformed
+        int filaSeleccionada = jTableLibros.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro de la tabla.");
+        return;
+        }
+
+        String tituloLibro = (String) mt.getValueAt(filaSeleccionada, 0);
+        Libro libro = librosCRUD.buscarPorTitulo(tituloLibro);
+
+        if (libro == null) {
+        JOptionPane.showMessageDialog(this, "No se pudo encontrar el libro.");
+        return;
+        }
+
+        if (libro.isDisponible()) {
+        JOptionPane.showMessageDialog(this, "Este libro ya está disponible. No necesita ser devuelto.");
+        return;
+        }
+
+        libro.setDisponible(true);
+        librosCRUD.actualizar(tituloLibro, libro);
+        librosCRUD.guardarEnArchivo();
+
+        JOptionPane.showMessageDialog(this, "Libro devuelto correctamente.");
+        cargarLibroEnTabla(librosCRUD.listarLibros());
+    }//GEN-LAST:event_jBDevolverActionPerformed
+
+    private void jBMostrarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMostrarPrestamosActionPerformed
+           List<Libro> prestamos = new ArrayList<>();
+
+        for (Libro l : librosCRUD.listarLibros()) {
+            if (!l.isDisponible()) {
+            prestamos.add(l);
+            }
+        }
+
+        if (prestamos.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No hay libros prestados actualmente.");
+        } else {
+        cargarLibroEnTabla(prestamos);
+        }
+    }//GEN-LAST:event_jBMostrarPrestamosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -88,6 +308,15 @@ public class MenuUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBBuscarLibro;
+    private javax.swing.JButton jBDevolver;
+    private javax.swing.JButton jBMostrarLibros;
+    private javax.swing.JButton jBMostrarPrestamos;
+    private javax.swing.JButton jBPrestamo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTBuscar;
+    private javax.swing.JTable jTableLibros;
     // End of variables declaration//GEN-END:variables
 }
