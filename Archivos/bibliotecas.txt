@@ -1,1 +1,2 @@
-ESPE;Privada;VALLE;;0.0
+Central;Pública;Universidad Central;;0.0
+Espe;Pública;ESPE;;0.0

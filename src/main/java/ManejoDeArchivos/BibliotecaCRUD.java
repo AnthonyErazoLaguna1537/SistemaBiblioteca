@@ -81,18 +81,37 @@ public class BibliotecaCRUD {
         return lista; 
     }
 
-    private void guardarBibliotecas(Biblioteca b) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
-            bw.write(b.getNombre() + ";" + b.getTipo() + ";" + b.getDireccion() + ";" + b.getEdificio().getDireccion()
-            + ";"+  b.getEdificio().getMetrosCuadrados());
-            bw.newLine();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar biblitoeca", "Error de guardado", 0);
+    private void guardarBibliotecas(Biblioteca bNueva) {
+        List<Biblioteca> bibliotecasExistentes = listarBibliotecas();
+
+        boolean reemplazada = false;
+        for (int i = 0; i < bibliotecasExistentes.size(); i++) {
+            if (bibliotecasExistentes.get(i).getNombre().equalsIgnoreCase(bNueva.getNombre())) {
+            bibliotecasExistentes.set(i, bNueva); // Reemplazar
+            reemplazada = true;
+            break;
+         }
         }
-        
-        guardarLibros(b.getNombre(), b.getLibros());
-        guardarPersonas (b.getNombre(), b.getPersonas()); 
+
+        if (!reemplazada) {
+        bibliotecasExistentes.add(bNueva); // Agregar si no existía
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+            for (Biblioteca b : bibliotecasExistentes) {
+            bw.write(b.getNombre() + ";" + b.getTipo() + ";" + b.getDireccion() + ";" +
+                    b.getEdificio().getDireccion() + ";" + b.getEdificio().getMetrosCuadrados());
+            bw.newLine();
+            }
+        } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al guardar biblioteca", "Error de guardado", 0);
     }
+
+    // Guardar los libros y personas por separado
+    guardarLibros(bNueva.getNombre(), bNueva.getLibros());
+    guardarPersonas(bNueva.getNombre(), bNueva.getPersonas());
+}
+
 
     private void guardarLibros(String nombreBib, ArrayList<Libro> libros) {
         String nombreArchivo = carpeta + "/libros_" + nombreBib + ".txt"; 
@@ -142,14 +161,15 @@ public class BibliotecaCRUD {
                     String linea; 
                     while ((linea = br.readLine()) != null){
                         String partes [] = linea.split(";"); 
-                        if (partes.length == 4){
+                        if (partes.length == 5){
                             String nombre = partes [0];
                             String tipo = partes[1]; 
                             String direccion = partes [2]; 
                             String dirEdificio = partes [3]; 
-                            
+                            double metrosCuadrados = Double.parseDouble(partes [4]); 
                             Edificio edificio = edificioCrud.buscarPorDireccion(dirEdificio); 
                             Biblioteca b = new Biblioteca(nombre, tipo, direccion, edificio); 
+                            listaBibliotecas.add(b);
                             
                         }
                                 

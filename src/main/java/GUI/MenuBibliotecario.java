@@ -8,7 +8,10 @@ import ManejoDeArchivos.BibliotecaCRUD;
 import ManejoDeArchivos.EdificioCRUD;
 import epn.com.biblioteca.Biblioteca;
 import epn.com.biblioteca.Edificio;
+import epn.com.biblioteca.Libro;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
    
     
 /**
@@ -21,13 +24,59 @@ public class MenuBibliotecario extends javax.swing.JFrame {
     private Biblioteca biblioteca = new Biblioteca(); 
     private Edificio edificio = new Edificio(); 
     private VentanaRegistro ventanaRegistro; 
+    DefaultTableModel mt = new DefaultTableModel(); 
     /**
      * Creates new form MenuBibliotecario
      */
     public MenuBibliotecario() {
         initComponents();
+        String ids [] = {"Titulo", "Autor", "Codigo","Disponible"};
+        mt.setColumnIdentifiers(ids);
+        jTableDataLibros.setModel(mt);
+        actualizarInfoComboBox();
     }
    
+    public void actualizarInfoComboBox(){
+        jCBiblio.removeAllItems(); 
+        List <Biblioteca> biliotecas = bibliotecaCrud.listarBibliotecas(); 
+        if (biliotecas.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se encuentran bibliotecas registradas");
+        } else {
+            for (Biblioteca b : biliotecas){
+                jCBiblio.addItem(b.getNombre());
+            }
+        }
+    }
+    
+    public void mostrarLibrosBiblioSeleccionada(){
+        String nombreBiblio = (String) jCBiblio.getSelectedItem(); 
+        if (nombreBiblio == null || nombreBiblio.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Selecciona una biblioteca válida");
+            return; 
+        }
+        List <Biblioteca> bibliotecas =bibliotecaCrud.listarBibliotecas();
+        boolean encontrada = false; 
+        for (Biblioteca b : bibliotecas){
+            if (b.getNombre().trim().equalsIgnoreCase(nombreBiblio)){
+                cargarDatosEnTabla(b.getLibros());
+                encontrada = true; 
+                break; 
+            }
+        }
+        if (!encontrada){
+            JOptionPane.showMessageDialog(null, "No se encontraron libros para la biblioteca seleccionada");
+        }
+    }
+    
+    public void cargarDatosEnTabla(List <Libro> libros){
+        mt.setRowCount(0);
+        for (Libro l : libros){
+            mt.addRow(new Object[]{
+                l.getTitulo(), l.getAutor(),
+                l.getCodigo(), l.isDisponible() ? "Si" : "No"
+            });
+        }
+    }
     
 
     /**
@@ -55,6 +104,8 @@ public class MenuBibliotecario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableDataLibros = new javax.swing.JTable();
         jBAgregar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jCBiblio = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 400));
@@ -82,6 +133,11 @@ public class MenuBibliotecario extends javax.swing.JFrame {
         });
 
         jBAgregarEliminar.setText("Eliminar libros");
+        jBAgregarEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAgregarEliminarActionPerformed(evt);
+            }
+        });
 
         jTableDataLibros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -97,6 +153,15 @@ public class MenuBibliotecario extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTableDataLibros);
 
         jBAgregar.setText("Agregar Libros");
+        jBAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAgregarActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Selecciona la biblioteca ");
+
+        jCBiblio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,7 +182,8 @@ public class MenuBibliotecario extends javax.swing.JFrame {
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel3)
-                                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(58, 58, 58)
@@ -132,7 +198,11 @@ public class MenuBibliotecario extends javax.swing.JFrame {
                                         .addGap(29, 29, 29)
                                         .addComponent(jBAgregar)
                                         .addGap(34, 34, 34)
-                                        .addComponent(jBAgregarEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(jBAgregarEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jCBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(122, 122, 122))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -168,9 +238,13 @@ public class MenuBibliotecario extends javax.swing.JFrame {
                     .addComponent(jBGuardar)
                     .addComponent(jBAgregarEliminar)
                     .addComponent(jBAgregar))
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jCBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,6 +276,67 @@ public class MenuBibliotecario extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jBGuardarActionPerformed
+
+    private void jBAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarActionPerformed
+        String  nombreBiblio = (String) jCBiblio.getSelectedItem(); 
+        if (nombreBiblio == null || nombreBiblio.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Seleccione una biblioteca válida");
+            return;
+        }
+         String titulo = JOptionPane.showInputDialog("Escribe el titulo del libro"); 
+         String autor = JOptionPane.showInputDialog("Escribe el autor del libro");
+         String codigo = JOptionPane.showInputDialog("Escribe el codigo del libro"); 
+         
+         if (titulo == null || autor == null || codigo == null){
+             JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+             return; 
+         }
+         
+        Libro libroNuevo = new Libro(titulo, autor, codigo, true); 
+        
+        List <Biblioteca> bibliotecas = bibliotecaCrud.listarBibliotecas(); 
+        for (Biblioteca b : bibliotecas){
+            if (b.getNombre().equalsIgnoreCase(nombreBiblio)){
+                b.getLibros().add(libroNuevo); 
+                bibliotecaCrud.agregarBiblioteca(b);
+                JOptionPane.showMessageDialog(null, "Libro agregado correctamente");
+                cargarDatosEnTabla(b.getLibros());
+                return; 
+            }
+        }
+        
+        JOptionPane.showMessageDialog(null, "No se encontró la biblioteca");
+        
+    }//GEN-LAST:event_jBAgregarActionPerformed
+
+    private void jBAgregarEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarEliminarActionPerformed
+        int filaSeleccionada = jTableDataLibros.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un libro en la tabla para eliminar");
+        return;
+        }
+
+        String codigoLibro = (String) jTableDataLibros.getValueAt(filaSeleccionada, 2); 
+        String nombreBiblio = (String) jCBiblio.getSelectedItem();
+
+        List<Biblioteca> bibliotecas = bibliotecaCrud.listarBibliotecas();
+        for (Biblioteca b : bibliotecas) {
+            if (b.getNombre().equalsIgnoreCase(nombreBiblio)) {
+                List<Libro> libros = b.getLibros();
+                boolean eliminado = libros.removeIf(l -> l.getCodigo().equalsIgnoreCase(codigoLibro));
+                if (eliminado) {
+                    bibliotecaCrud.agregarBiblioteca(b);  
+                    cargarDatosEnTabla(libros);
+                    JOptionPane.showMessageDialog(this, "Libro eliminado correctamente");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el libro");
+            }
+            return;
+        }
+    }
+
+        JOptionPane.showMessageDialog(this, "No se encontró la biblioteca");
+    }//GEN-LAST:event_jBAgregarEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,6 +377,7 @@ public class MenuBibliotecario extends javax.swing.JFrame {
     private javax.swing.JButton jBAgregar;
     private javax.swing.JButton jBAgregarEliminar;
     private javax.swing.JButton jBGuardar;
+    private javax.swing.JComboBox<String> jCBiblio;
     private javax.swing.JComboBox<String> jCTipoBiblio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -249,6 +385,7 @@ public class MenuBibliotecario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTDireccion;
     private javax.swing.JTextField jTMetrosCuadrados;

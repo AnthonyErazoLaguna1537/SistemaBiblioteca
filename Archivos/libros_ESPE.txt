@@ -1,15 +1,16 @@
-Fundamentos de Transferencia de Calor;Frank Kreith;L001;false
-Mecánica de Materiales Aplicada;James M. Gere;L002;false
-Dinámica de Sistemas de Control;Ogata Katsuhiko;L003;true
-Ingeniería de Procesos Químicos;Richard Turton;L004;true
-Diseño de Máquinas y Mecanismos;Robert L. Norton;L005;true
-Termodinámica en la Ingeniería Química;Yunus Cengel;L006;true
-Programación en Python para Ingenieros;Jason Cannon;L007;true
-Circuitos Eléctricos Básicos;Charles Alexander;L008;false
-Mecánica de Fluidos con Aplicaciones;Douglas C. Montgomery;L009;true
-Gestión de Proyectos de Ingeniería;Erik W. Larson;L010;true
-Ingeniería Ambiental Moderna;Benoit Cushman-Roisin;L011;true
-Simulación de Procesos Industriales;Andrés González;L012;true
-Ingeniería de Software Avanzada;Ian Sommerville;L013;true
-Modelado y Simulación con MATLAB;Brian Hahn;L014;true
-Diseño de Reactores Químicos;Octave Levenspiel;L015;true
+Introducción a la Termodinámica;Ing. Marco Cedeño;CI001;true
+Fundamentos de Mecánica de Fluidos;Dra. Elena Torres;CI002;true
+Análisis de Circuitos Eléctricos;Dr. José Martínez;CI003;false
+Procesos Químicos Industriales;MSc. Laura Mejía;CI004;true
+Inteligencia Artificial Aplicada;Ing. Ricardo Paredes;CI005;true
+Diseño de Reactores Químicos;Dra. Cecilia López;CI006;true
+Matemáticas Avanzadas para Ingeniería;Dr. Daniel Ortega;CI007;false
+Simulación de Procesos con MATLAB;Ing. Andrea Guzmán;CI008;true
+Control Automático Moderno;Dr. Pablo Reinoso;CI009;true
+Ingeniería de Materiales;Ing. Tatiana Herrera;CI010;false
+Transferencia de Calor y Masa;Dra. Verónica Castro;CI011;true
+Robótica y Automatización Industrial;Ing. Sebastián Ríos;CI012;true
+Química Ambiental Aplicada;Dra. Karina Salas;CI013;true
+Programación Científica con Python;Ing. Jorge Silva;CI014;true
+Análisis Numérico para Ingenieros;MSc. Felipe Narváez;CI015;false
+El extranjero;Albert Camus;L016;true
