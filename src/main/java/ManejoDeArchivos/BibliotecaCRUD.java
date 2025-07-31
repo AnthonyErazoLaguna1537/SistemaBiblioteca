@@ -29,6 +29,13 @@ public class BibliotecaCRUD {
     private final String archivo = carpeta + "/bibliotecas.txt"; 
     private EdificioCRUD edificioCrud; 
 
+    
+    public BibliotecaCRUD() {
+        listaBibliotecas = new ArrayList<>(); 
+    }
+
+    
+    
     public BibliotecaCRUD(EdificioCRUD edificioCrud) {
         this.edificioCrud = edificioCrud;
         listaBibliotecas = new ArrayList<>(); 
@@ -49,12 +56,35 @@ public class BibliotecaCRUD {
     }
     
     public List <Biblioteca> listarBibliotecas(){
-        return listaBibliotecas; 
+        List <Biblioteca> lista = new ArrayList<>(); 
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null){
+                String partes [] = linea.split(";");
+                if (partes.length == 5){
+                    String nombre = partes [0]; 
+                    String tipo = partes [1];
+                    String direccion = partes [2];
+                    String ubicacionEdificio = partes [3]; 
+                    double metrosCuadrados = Double.parseDouble(partes [4]); 
+                    Edificio edificio = new Edificio(ubicacionEdificio, metrosCuadrados); 
+                    Biblioteca biblioteca = new Biblioteca(nombre, tipo, direccion, edificio);
+                    List<Libro> libros = cargarLibros(nombre);
+                    biblioteca.setLibros((ArrayList<Libro>) libros);
+
+                    lista.add(biblioteca);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No se pudo listar correctamente");
+        }
+        return lista; 
     }
 
     private void guardarBibliotecas(Biblioteca b) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
-            bw.write(b.getNombre() + ";" + b.getTipo() + ";" + b.getDireccion() + ";" + b.getEdificio().getDireccion());
+            bw.write(b.getNombre() + ";" + b.getTipo() + ";" + b.getDireccion() + ";" + b.getEdificio().getDireccion()
+            + ";"+  b.getEdificio().getMetrosCuadrados());
             bw.newLine();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al guardar biblitoeca", "Error de guardado", 0);
@@ -65,19 +95,17 @@ public class BibliotecaCRUD {
     }
 
     private void guardarLibros(String nombreBib, ArrayList<Libro> libros) {
-        String nombreArchivo = carpeta + "/libros_" + nombreBib +".txt"; 
+        String nombreArchivo = carpeta + "/libros_" + nombreBib + ".txt"; 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
             for (Libro l : libros){
-                bw.write(l.getCodigo() + ";" + l.getTitulo() + ";" + l.getAutor()+ l.isDisponible());
-                bw.newLine();
+            // Guardar: Título ; Autor ; Código ; Disponible
+            bw.write(l.getTitulo() + ";" + l.getAutor() + ";" + l.getCodigo() + ";" + l.isDisponible());
+            bw.newLine();
             }
-            
         } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Error al guardar libros", "Error de guardado", 0);
-
-        }
-        
+        JOptionPane.showMessageDialog(null, "Error al guardar libros", "Error de guardado", 0);
     }
+}
 
     private void guardarPersonas(String nombreBib, ArrayList<Persona> personas) {
         String nombreArchivo = carpeta + "/personas_" + nombreBib + ".txt"; 
@@ -122,8 +150,7 @@ public class BibliotecaCRUD {
                             
                             Edificio edificio = edificioCrud.buscarPorDireccion(dirEdificio); 
                             Biblioteca b = new Biblioteca(nombre, tipo, direccion, edificio); 
-                            b.setLibros((ArrayList<Libro>) cargarLibros(nombre));
-                            b.setPersonas((ArrayList<Persona>) cargarPersonas(nombre));
+                            
                         }
                                 
                     }
@@ -134,30 +161,32 @@ public class BibliotecaCRUD {
             
         }
     
-    private List <Libro> cargarLibros (String nombreBib){
-        List <Libro> libros = new ArrayList<>(); 
-        String archivoLibros = carpeta + "/libros_" + nombreBib + ".txt"; 
-        File file = new File(archivoLibros); 
-        if (!file.exists()) return libros; 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String linea;
-            while ((linea = br.readLine()) != null){
-                String partes [] = linea.split(";"); 
-                if (partes.length == 4){
-                    String titulo = partes [0]; 
-                    String autor = partes [1]; 
-                    String codigo = partes [2]; 
-                    boolean esDisponible = Boolean.parseBoolean(partes [3]); 
-                    libros.add(new Libro(titulo, autor, codigo, esDisponible)); 
-                }
+private List<Libro> cargarLibros(String nombreBib) {
+    List<Libro> libros = new ArrayList<>(); 
+    String archivoLibros = carpeta + "/libros_" + nombreBib + ".txt"; 
+    File file = new File(archivoLibros); 
+    
+    if (!file.exists()) return libros; 
+    
+    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            String partes[] = linea.split(";"); 
+            if (partes.length == 4) {
+                String titulo = partes[0]; 
+                String autor = partes[1]; 
+                String codigo = partes[2]; 
+                boolean esDisponible = Boolean.parseBoolean(partes[3]); 
+                
+                libros.add(new Libro(titulo, autor, codigo, esDisponible)); 
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar los libros", "Error de cargado", 0);
-
         }
-        
-        return libros; 
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al cargar los libros", "Error de cargado", 0);
     }
+
+    return libros; 
+}
     
     private List <Persona> cargarPersonas (String nombreBib){
         List <Persona> personas = new ArrayList<>(); 

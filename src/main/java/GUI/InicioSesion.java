@@ -8,8 +8,11 @@ import ManejoDeArchivos.AccesoCRUD;
 import ManejoDeArchivos.BibliotecaCRUD;
 import ManejoDeArchivos.BibliotecarioCRUD;
 import ManejoDeArchivos.UsuarioCRUD;
+import epn.com.biblioteca.Biblioteca;
 import epn.com.biblioteca.Bibliotecario;
 import epn.com.biblioteca.Usuario;
+import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -18,12 +21,14 @@ import javax.swing.JOptionPane;
  * @author Thony
  */
 public class InicioSesion extends javax.swing.JFrame {
-
+    private BibliotecaCRUD biblioCrud = new BibliotecaCRUD();
     /**
      * Creates new form VentanaRegistro
      */
     public InicioSesion() {
         initComponents();
+       
+        
     }
 
     /**
@@ -77,6 +82,11 @@ public class InicioSesion extends javax.swing.JFrame {
         });
 
         jBSalir.setText("Salir del sistema");
+        jBSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,25 +96,26 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBIniciarSesion)
+                        .addGap(18, 18, 18)
+                        .addComponent(jBRegistrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jBSalir))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(29, 29, 29)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel2))
+                            .addGap(69, 69, 69)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTUsuario)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addGap(83, 83, 83)
-                                    .addComponent(jPContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBIniciarSesion)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBRegistrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBSalir)))
-                        .addContainerGap(52, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                    .addComponent(jPContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,12 +132,12 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jPContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBIniciarSesion)
                     .addComponent(jBRegistrar)
                     .addComponent(jBSalir))
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addGap(110, 110, 110))
         );
 
         pack();
@@ -169,6 +180,10 @@ public class InicioSesion extends javax.swing.JFrame {
         VentanaRegistro ventanaRegistro = new VentanaRegistro(this, true); 
         ventanaRegistro.setVisible(true);
     }//GEN-LAST:event_jBRegistrarActionPerformed
+
+    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jBSalirActionPerformed
 
     /**
      * @param args the command line arguments

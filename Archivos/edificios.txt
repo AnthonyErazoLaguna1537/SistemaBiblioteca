@@ -1,0 +1,4 @@
+UniversidadCentral;220.0
+EPN;400.0
+SANGOLQUI;500.0
+UNICENTRAL;500.0

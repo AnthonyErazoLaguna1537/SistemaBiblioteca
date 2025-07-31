@@ -4,7 +4,9 @@
  */
 package GUI;
 
+import ManejoDeArchivos.BibliotecaCRUD;
 import ManejoDeArchivos.LibroCRUD;
+import epn.com.biblioteca.Biblioteca;
 import epn.com.biblioteca.Libro;
 import epn.com.biblioteca.Usuario;
 import java.lang.reflect.Array;
@@ -20,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class MenuUsuario extends javax.swing.JFrame {
     private Usuario usuario = new Usuario(); 
     private LibroCRUD librosCRUD = new LibroCRUD(); 
+    private BibliotecaCRUD biblioCrud = new BibliotecaCRUD();
     DefaultTableModel mt = new DefaultTableModel(); 
     
     /**
@@ -30,7 +33,40 @@ public class MenuUsuario extends javax.swing.JFrame {
         String ids [] = {"Titulo", "Autor", "Codigo", "Disponible"}; 
         mt.setColumnIdentifiers(ids);
         jTableLibros.setModel(mt);
+        actualizarComboBoxBiblioteca();
         
+    }
+        public void actualizarComboBoxBiblioteca(){
+        jCTiposBibliosUser.removeAllItems(); 
+        List <Biblioteca> bibliotecas = biblioCrud.listarBibliotecas(); 
+        if (bibliotecas.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se hay bibliotecas registradas");
+        } else {
+            for (Biblioteca b : bibliotecas){
+            jCTiposBibliosUser.addItem(b.getNombre());
+            }
+        }
+    }
+        
+    private void mostrarLibrosDeBiblioSeleccionada(){
+       String nombreBiblio = (String) jCTiposBibliosUser.getSelectedItem(); 
+        if (nombreBiblio == null || nombreBiblio.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Selecciona una biblioteca válida.");
+            return;
+        }
+        List<Biblioteca> bibliotecas = biblioCrud.listarBibliotecas();
+        boolean encontrada = false;
+        for (Biblioteca b : bibliotecas){
+            if (b.getNombre().trim().equalsIgnoreCase(nombreBiblio.trim())){
+                cargarLibroEnTabla(b.getLibros());
+                encontrada = true;
+                break;
+            }
+        }
+
+        if (!encontrada) {
+            JOptionPane.showMessageDialog(this, "No se encontraron libros para la biblioteca seleccionada.");
+        }
     }
     private void cargarLibroEnTabla(List<Libro> libros) {
     mt.setRowCount(0);
@@ -64,6 +100,8 @@ public class MenuUsuario extends javax.swing.JFrame {
         jBMostrarLibros = new javax.swing.JButton();
         jBPrestamo = new javax.swing.JButton();
         jBDevolver = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jCTiposBibliosUser = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 400));
@@ -119,6 +157,10 @@ public class MenuUsuario extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("¿En qué biblioteca deseas buscar? ");
+
+        jCTiposBibliosUser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona tu biblioteca..." }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,27 +171,32 @@ public class MenuUsuario extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jBMostrarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBMostrarLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel3)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBMostrarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBMostrarLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(116, 116, 116)
+                                .addComponent(jBPrestamo)
+                                .addGap(26, 26, 26)
+                                .addComponent(jBDevolver)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addComponent(jBPrestamo)
-                .addGap(109, 109, 109)
-                .addComponent(jBDevolver)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jCTiposBibliosUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBBuscarLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -157,119 +204,170 @@ public class MenuUsuario extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel1)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jCTiposBibliosUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
                     .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
                     .addComponent(jBBuscarLibro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBMostrarPrestamos)
                     .addComponent(jBMostrarLibros))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBPrestamo)
                     .addComponent(jBDevolver))
-                .addContainerGap(206, Short.MAX_VALUE))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBBuscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarLibroActionPerformed
-        String libroBuscar = jTBuscar.getText().trim().toLowerCase();
-        List <Libro> resultados = librosCRUD.buscarPorTexto(libroBuscar); 
-        if (resultados == null || resultados.isEmpty()){
-            JOptionPane.showMessageDialog(null, "No se encontraron libros");
-        } else{
-            cargarLibroEnTabla(resultados);
-        }
-       jTBuscar.setText("");
-    }//GEN-LAST:event_jBBuscarLibroActionPerformed
+    String textoBusqueda = jTBuscar.getText().trim().toLowerCase();
+    String nombreBiblioteca = (String) jCTiposBibliosUser.getSelectedItem();
 
-    private void jBMostrarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMostrarLibrosActionPerformed
-       List <Libro> todos = librosCRUD.listarLibros(); 
-       if (todos.isEmpty()){
-           JOptionPane.showMessageDialog(null, "No existen libros");
-       } else{
-           cargarLibroEnTabla(todos);
-       }
-    }//GEN-LAST:event_jBMostrarLibrosActionPerformed
-
-    private void jBPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrestamoActionPerformed
-        int filaSeleccionada = jTableLibros.getSelectedRow();
-
-        if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro de la tabla.");
-        return;
-        }
-
-        String tituloLibro = (String) mt.getValueAt(filaSeleccionada, 0);
-        Libro libro = librosCRUD.buscarPorTitulo(tituloLibro);
-
-        if (libro == null) {
-        JOptionPane.showMessageDialog(this, "No se pudo encontrar el libro.");
-        return;
-        }
-
-    if (!libro.isDisponible()) {
-        JOptionPane.showMessageDialog(this, "Este libro ya está prestado.");
+    if (nombreBiblioteca == null || nombreBiblioteca.equals("Selecciona tu biblioteca...")) {
+        JOptionPane.showMessageDialog(this, "Selecciona una biblioteca primero.");
         return;
     }
 
-    
-    libro.setDisponible(false);
-    librosCRUD.actualizar(tituloLibro, libro); 
-    librosCRUD.guardarEnArchivo();
-    JOptionPane.showMessageDialog(this, "Préstamo realizado exitosamente.");
-    cargarLibroEnTabla(librosCRUD.listarLibros());
+    if (textoBusqueda.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Escribe el título o autor del libro a buscar.");
+        return;
+    }
+
+    List<Biblioteca> bibliotecas = biblioCrud.listarBibliotecas();
+    for (Biblioteca b : bibliotecas) {
+        if (b.getNombre().equalsIgnoreCase(nombreBiblioteca)) {
+            List<Libro> resultados = new ArrayList<>();
+            for (Libro l : b.getLibros()) {
+                if (l.getTitulo().toLowerCase().contains(textoBusqueda) ||
+                    l.getAutor().toLowerCase().contains(textoBusqueda)) {
+                    resultados.add(l);
+                }
+            }
+
+            if (resultados.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron libros con ese criterio.");
+            } else {
+                cargarLibroEnTabla(resultados);
+            }
+
+            jTBuscar.setText("");
+            return;
+        }
+    }
+
+    JOptionPane.showMessageDialog(this, "Biblioteca no encontrada.");
+    }//GEN-LAST:event_jBBuscarLibroActionPerformed
+
+    private void jBMostrarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMostrarLibrosActionPerformed
+      mostrarLibrosDeBiblioSeleccionada();
+    }//GEN-LAST:event_jBMostrarLibrosActionPerformed
+
+    private void jBPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrestamoActionPerformed
+    int filaSeleccionada = jTableLibros.getSelectedRow();
+
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro de la tabla.");
+        return;
+    }
+
+    String nombreBiblioteca = (String) jCTiposBibliosUser.getSelectedItem();
+    String tituloLibro = (String) jTableLibros.getValueAt(filaSeleccionada, 0);
+
+    List<Biblioteca> bibliotecas = biblioCrud.listarBibliotecas();
+    for (Biblioteca b : bibliotecas) {
+        if (b.getNombre().equalsIgnoreCase(nombreBiblioteca)) {
+            for (Libro l : b.getLibros()) {
+                if (l.getTitulo().equalsIgnoreCase(tituloLibro)) {
+                    if (!l.isDisponible()) {
+                        JOptionPane.showMessageDialog(this, "Este libro ya está prestado.");
+                        return;
+                    }
+
+                    l.setDisponible(false);
+                    biblioCrud.agregarBiblioteca(b); 
+                    JOptionPane.showMessageDialog(this, "Préstamo realizado exitosamente.");
+                    cargarLibroEnTabla(b.getLibros());
+                    return;
+                }
+            }
+        }
+    }
+
+    JOptionPane.showMessageDialog(this, "No se encontró el libro en la biblioteca seleccionada.");
     }//GEN-LAST:event_jBPrestamoActionPerformed
 
     private void jBDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDevolverActionPerformed
-        int filaSeleccionada = jTableLibros.getSelectedRow();
+    int filaSeleccionada = jTableLibros.getSelectedRow();
 
-        if (filaSeleccionada == -1) {
+    if (filaSeleccionada == -1) {
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un libro de la tabla.");
         return;
+    }
+
+    String nombreBiblioteca = (String) jCTiposBibliosUser.getSelectedItem();
+    String tituloLibro = (String) jTableLibros.getValueAt(filaSeleccionada, 0);
+
+    List<Biblioteca> bibliotecas = biblioCrud.listarBibliotecas();
+    for (Biblioteca b : bibliotecas) {
+        if (b.getNombre().equalsIgnoreCase(nombreBiblioteca)) {
+            for (Libro l : b.getLibros()) {
+                if (l.getTitulo().equalsIgnoreCase(tituloLibro)) {
+                    if (l.isDisponible()) {
+                        JOptionPane.showMessageDialog(this, "Este libro ya está disponible.");
+                        return;
+                    }
+
+                    l.setDisponible(true);
+                    biblioCrud.agregarBiblioteca(b); 
+                    JOptionPane.showMessageDialog(this, "Libro devuelto correctamente.");
+                    cargarLibroEnTabla(b.getLibros());
+                    return;
+                }
+            }
         }
+    }
 
-        String tituloLibro = (String) mt.getValueAt(filaSeleccionada, 0);
-        Libro libro = librosCRUD.buscarPorTitulo(tituloLibro);
-
-        if (libro == null) {
-        JOptionPane.showMessageDialog(this, "No se pudo encontrar el libro.");
-        return;
-        }
-
-        if (libro.isDisponible()) {
-        JOptionPane.showMessageDialog(this, "Este libro ya está disponible. No necesita ser devuelto.");
-        return;
-        }
-
-        libro.setDisponible(true);
-        librosCRUD.actualizar(tituloLibro, libro);
-        librosCRUD.guardarEnArchivo();
-
-        JOptionPane.showMessageDialog(this, "Libro devuelto correctamente.");
-        cargarLibroEnTabla(librosCRUD.listarLibros());
+    JOptionPane.showMessageDialog(this, "No se encontró el libro en la biblioteca seleccionada.");
     }//GEN-LAST:event_jBDevolverActionPerformed
 
     private void jBMostrarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMostrarPrestamosActionPerformed
-           List<Libro> prestamos = new ArrayList<>();
+               String nombreBiblioteca = (String) jCTiposBibliosUser.getSelectedItem();
 
-        for (Libro l : librosCRUD.listarLibros()) {
-            if (!l.isDisponible()) {
-            prestamos.add(l);
+    if (nombreBiblioteca == null || nombreBiblioteca.equals("Selecciona tu biblioteca...")) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona una biblioteca.");
+        return;
+    }
+
+    List<Biblioteca> bibliotecas = biblioCrud.listarBibliotecas();
+    for (Biblioteca b : bibliotecas) {
+        if (b.getNombre().equalsIgnoreCase(nombreBiblioteca)) {
+            List<Libro> prestamos = new ArrayList<>();
+            for (Libro l : b.getLibros()) {
+                if (!l.isDisponible()) {
+                    prestamos.add(l);
+                }
             }
-        }
 
-        if (prestamos.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No hay libros prestados actualmente.");
-        } else {
-        cargarLibroEnTabla(prestamos);
+            if (prestamos.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay libros prestados actualmente en esta biblioteca.");
+            } else {
+                cargarLibroEnTabla(prestamos);
+            }
+            return;
         }
+    }
+
+        JOptionPane.showMessageDialog(this, "Biblioteca no encontrada.");
     }//GEN-LAST:event_jBMostrarPrestamosActionPerformed
 
     /**
@@ -313,8 +411,10 @@ public class MenuUsuario extends javax.swing.JFrame {
     private javax.swing.JButton jBMostrarLibros;
     private javax.swing.JButton jBMostrarPrestamos;
     private javax.swing.JButton jBPrestamo;
+    private javax.swing.JComboBox<String> jCTiposBibliosUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTBuscar;
     private javax.swing.JTable jTableLibros;

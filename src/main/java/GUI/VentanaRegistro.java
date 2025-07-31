@@ -5,13 +5,16 @@
 package GUI;
 
 import ManejoDeArchivos.AccesoCRUD;
+import ManejoDeArchivos.BibliotecaCRUD;
 import ManejoDeArchivos.BibliotecarioCRUD;
 import ManejoDeArchivos.UsuarioCRUD;
 import epn.com.biblioteca.Acceso;
+import epn.com.biblioteca.Biblioteca;
 import epn.com.biblioteca.Bibliotecario;
 import epn.com.biblioteca.Usuario;
 import java.awt.CardLayout;
 import java.awt.Panel;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,9 +22,10 @@ import javax.swing.JOptionPane;
  * @author Thony
  */
 public class VentanaRegistro extends javax.swing.JDialog {
-    private UsuarioCRUD usuarioCRUD = new UsuarioCRUD(); 
-    private BibliotecarioCRUD bibliotecarioCRUD = new BibliotecarioCRUD(); 
+    private UsuarioCRUD usuarioCRUD = new UsuarioCRUD();
+    private BibliotecarioCRUD bibliotecarioCRUD  = new BibliotecarioCRUD(); 
     private AccesoCRUD accesoCRUD = new AccesoCRUD();
+    private BibliotecaCRUD biblioCrud = new BibliotecaCRUD(); 
     /**
      * Creates new form VentanaRegistro
      */
@@ -31,6 +35,19 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jPPanelCambiante.setLayout(new CardLayout());
         jPPanelCambiante.add(jPanelUsuario, "Usuario"); 
         jPPanelCambiante.add(jPanelBibliotecario, "Bibliotecario"); 
+        actualizarComboBoxBiblioteca();
+    }
+    
+    public void actualizarComboBoxBiblioteca(){
+        jComboBox1.removeAllItems(); // Limpia las entradas anteriores
+        List <Biblioteca> bibliotecas = biblioCrud.listarBibliotecas(); 
+        if (bibliotecas.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se hay bibliotecas registradas");
+        } else {
+            for (Biblioteca b : bibliotecas){
+            jComboBox1.addItem(b.getNombre());
+            }
+        }
     }
 
     /**
@@ -46,13 +63,6 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jPGeneral = new javax.swing.JPanel();
         jRol = new javax.swing.JComboBox<>();
         jPPanelCambiante = new javax.swing.JPanel();
-        jPanelBibliotecario = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jTSalario = new javax.swing.JTextField();
-        jCAreasTrabajo = new javax.swing.JComboBox<>();
-        jCHorarios = new javax.swing.JComboBox<>();
         jPanelUsuario = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jCTipoDocumento = new javax.swing.JComboBox<>();
@@ -61,6 +71,15 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jRNoSub = new javax.swing.JRadioButton();
         jLabel12 = new javax.swing.JLabel();
         jTTipoDocumento = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanelBibliotecario = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jTSalario = new javax.swing.JTextField();
+        jCAreasTrabajo = new javax.swing.JComboBox<>();
+        jCHorarios = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -70,13 +89,13 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jTNombre = new javax.swing.JTextField();
         jTTelefono = new javax.swing.JTextField();
         jTUsuarioRegistro = new javax.swing.JTextField();
-        jBRegistrar = new javax.swing.JButton();
         jPContraRegistro = new javax.swing.JPasswordField();
+        jBRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(400, 500));
 
-        jPGeneral.setPreferredSize(new java.awt.Dimension(500, 400));
+        jPGeneral.setPreferredSize(new java.awt.Dimension(600, 500));
 
         jRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un rol...", "Bibliotecario", "Usuario", " " }));
         jRol.addActionListener(new java.awt.event.ActionListener() {
@@ -86,53 +105,6 @@ public class VentanaRegistro extends javax.swing.JDialog {
         });
 
         jPPanelCambiante.setLayout(new java.awt.CardLayout());
-
-        jLabel7.setText("Area de trabajo");
-
-        jLabel8.setText("Salario");
-
-        jLabel9.setText("Horario");
-
-        jCAreasTrabajo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Recepción", "Busqued", "Prestamos y devoluciones", "Procesos tecnicos" }));
-
-        jCHorarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matutino", "Vespertino", "Turno Completo" }));
-
-        javax.swing.GroupLayout jPanelBibliotecarioLayout = new javax.swing.GroupLayout(jPanelBibliotecario);
-        jPanelBibliotecario.setLayout(jPanelBibliotecarioLayout);
-        jPanelBibliotecarioLayout.setHorizontalGroup(
-            jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelBibliotecarioLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTSalario)
-                    .addComponent(jCAreasTrabajo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCHorarios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(16, 16, 16))
-        );
-        jPanelBibliotecarioLayout.setVerticalGroup(
-            jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelBibliotecarioLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jCAreasTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(jCHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-
-        jPPanelCambiante.add(jPanelBibliotecario, "Bibliotecario");
 
         jPanelUsuario.setPreferredSize(new java.awt.Dimension(150, 300));
 
@@ -150,26 +122,36 @@ public class VentanaRegistro extends javax.swing.JDialog {
 
         jLabel12.setText("Digite el tipo de documento");
 
+        jLabel13.setText("Biblioteca");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecciona una bibliteca para registrarte" }));
+
         javax.swing.GroupLayout jPanelUsuarioLayout = new javax.swing.GroupLayout(jPanelUsuario);
         jPanelUsuario.setLayout(jPanelUsuarioLayout);
         jPanelUsuarioLayout.setHorizontalGroup(
             jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelUsuarioLayout.createSequentialGroup()
-                .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11)
-                    .addGroup(jPanelUsuarioLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel12)))
-                .addGap(23, 23, 23)
                 .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelUsuarioLayout.createSequentialGroup()
-                        .addComponent(jRSiSub)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRNoSub))
-                    .addComponent(jCTipoDocumento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTTipoDocumento))
-                .addContainerGap(38, Short.MAX_VALUE))
+                        .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel12)))
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                                .addComponent(jRSiSub)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jRNoSub))
+                            .addComponent(jCTipoDocumento, 0, 159, Short.MAX_VALUE)
+                            .addComponent(jTTipoDocumento)))
+                    .addGroup(jPanelUsuarioLayout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanelUsuarioLayout.setVerticalGroup(
             jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,10 +173,61 @@ public class VentanaRegistro extends javax.swing.JDialog {
                     .addGroup(jPanelUsuarioLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel11)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         jPPanelCambiante.add(jPanelUsuario, "Usuario");
+
+        jLabel7.setText("Area de trabajo");
+
+        jLabel8.setText("Salario");
+
+        jLabel9.setText("Horario");
+
+        jCAreasTrabajo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un area...", "Biblitecario", "Administrador" }));
+
+        jCHorarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matutino", "Vespertino", "Turno Completo" }));
+
+        javax.swing.GroupLayout jPanelBibliotecarioLayout = new javax.swing.GroupLayout(jPanelBibliotecario);
+        jPanelBibliotecario.setLayout(jPanelBibliotecarioLayout);
+        jPanelBibliotecarioLayout.setHorizontalGroup(
+            jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBibliotecarioLayout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addGap(58, 58, 58)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCAreasTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+        jPanelBibliotecarioLayout.setVerticalGroup(
+            jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelBibliotecarioLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jCAreasTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelBibliotecarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+
+        jPPanelCambiante.add(jPanelBibliotecario, "Bibliotecario");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("R E G I S T R O ");
@@ -225,60 +258,59 @@ public class VentanaRegistro extends javax.swing.JDialog {
                 .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPGeneralLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPPanelCambiante, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPGeneralLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(jPGeneralLayout.createSequentialGroup()
-                                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(81, 81, 81)
-                                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jRol, 0, 150, Short.MAX_VALUE)
-                                    .addComponent(jTNombre)
-                                    .addComponent(jTTelefono)
-                                    .addComponent(jTUsuarioRegistro)
-                                    .addComponent(jPContraRegistro)))))
+                            .addComponent(jPPanelCambiante, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPGeneralLayout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addComponent(jBRegistrar)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel6))
+                        .addGap(74, 74, 74)
+                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRol, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTUsuarioRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPContraRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBRegistrar))))
+                .addContainerGap(135, Short.MAX_VALUE))
+            .addGroup(jPGeneralLayout.createSequentialGroup()
+                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPGeneralLayout.setVerticalGroup(
             jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPGeneralLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPGeneralLayout.createSequentialGroup()
-                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jTTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTUsuarioRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6))
-                    .addComponent(jPContraRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addGroup(jPGeneralLayout.createSequentialGroup()
+                        .addComponent(jTUsuarioRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jPContraRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))))
+                .addGap(18, 18, 18)
                 .addComponent(jBRegistrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPPanelCambiante, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jPPanelCambiante, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -286,13 +318,14 @@ public class VentanaRegistro extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+            .addComponent(jPGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
         );
 
         pack();
@@ -312,7 +345,22 @@ public class VentanaRegistro extends javax.swing.JDialog {
         Acceso acceso = new Acceso(usuarioRegistro, contrasena);
         accesoCRUD.agregarAcceso(acceso);
         String rol = (String) jRol.getSelectedItem(); 
+        String nombreBiblitoecaSeleccionada = (String) jComboBox1.getSelectedItem(); 
+        BibliotecaCRUD biblioCrud = new BibliotecaCRUD(); 
+        List <Biblioteca> bibliotecas = biblioCrud.listarBibliotecas(); 
         
+        Biblioteca biblioSeleccionada = null; 
+        
+        for (Biblioteca b : bibliotecas){
+            if (b.getNombre().equalsIgnoreCase(nombreBiblitoecaSeleccionada)){
+                biblioSeleccionada = b;
+                break; 
+            }
+        }
+        
+        if (biblioSeleccionada == null){
+            JOptionPane.showMessageDialog(null, "Debe de seleccionar una biblioteca");
+        }
         if("Usuario".equals(rol)){
             String tipoDocumento = (String) jCTipoDocumento.getSelectedItem(); 
             String documentoDigito = jTTipoDocumento.getText(); 
@@ -324,6 +372,8 @@ public class VentanaRegistro extends javax.swing.JDialog {
             }
             Usuario usuarioNuevo = new Usuario(nombre, telefono, acceso, tipoDocumento, documentoDigito, subActiva);
             usuarioCRUD.agregarUsuario(usuarioNuevo);
+            biblioSeleccionada.getPersonas().add(usuarioNuevo); 
+            
             JOptionPane.showMessageDialog(null, "Usuario registrado con existo", "Exito en el registro",1);
         } else if ("Bibliotecario".equals(rol)){
             String areaTrabajo = (String) jCAreasTrabajo.getSelectedItem();
@@ -331,10 +381,11 @@ public class VentanaRegistro extends javax.swing.JDialog {
             String horario = (String) jCHorarios.getSelectedItem();
             Bibliotecario biblio = new Bibliotecario(nombre, telefono, acceso, areaTrabajo, salario, horario);
             bibliotecarioCRUD.agregarBiblitecario(biblio);
+            biblioSeleccionada.getPersonas().add(biblio); 
             JOptionPane.showMessageDialog(null, "Bibliotecario registrado con existo", "Exito en el registro",1);
 
         }
-        
+        biblioCrud.agregarBiblioteca(biblioSeleccionada);
         
         jTNombre.setText("");
         jTTelefono.setText("");
@@ -398,10 +449,12 @@ public class VentanaRegistro extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> jCAreasTrabajo;
     private javax.swing.JComboBox<String> jCHorarios;
     private javax.swing.JComboBox<String> jCTipoDocumento;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

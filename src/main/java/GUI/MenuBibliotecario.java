@@ -4,18 +4,31 @@
  */
 package GUI;
 
+import ManejoDeArchivos.BibliotecaCRUD;
+import ManejoDeArchivos.EdificioCRUD;
+import epn.com.biblioteca.Biblioteca;
+import epn.com.biblioteca.Edificio;
+import javax.swing.JOptionPane;
+   
+    
 /**
  *
  * @author Thony
  */
 public class MenuBibliotecario extends javax.swing.JFrame {
-
+    private EdificioCRUD edificioCrud = new EdificioCRUD();
+    private BibliotecaCRUD bibliotecaCrud = new BibliotecaCRUD(); 
+    private Biblioteca biblioteca = new Biblioteca(); 
+    private Edificio edificio = new Edificio(); 
+    private VentanaRegistro ventanaRegistro; 
     /**
      * Creates new form MenuBibliotecario
      */
     public MenuBibliotecario() {
         initComponents();
     }
+   
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,33 +39,169 @@ public class MenuBibliotecario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTNombreBiblio = new javax.swing.JTextField();
+        jTDireccion = new javax.swing.JTextField();
+        jTMetrosCuadrados = new javax.swing.JTextField();
+        jTUbiEdificio = new javax.swing.JTextField();
+        jCTipoBiblio = new javax.swing.JComboBox<>();
+        jBGuardar = new javax.swing.JButton();
+        jBAgregarEliminar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableDataLibros = new javax.swing.JTable();
+        jBAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(500, 400));
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Gestión de Biblioteca");
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jLabel2.setText("Nombre de la biblioteca");
 
-        setJMenuBar(jMenuBar1);
+        jLabel3.setText("Tipo");
+
+        jLabel4.setText("Direccion");
+
+        jLabel5.setText("Metros cuadrados");
+
+        jLabel6.setText("Ubicacion del edificio");
+
+        jCTipoBiblio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sleccione un tipo...", "Pública", "Privada" }));
+
+        jBGuardar.setText("Añadir Biblioteca");
+        jBGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBGuardarActionPerformed(evt);
+            }
+        });
+
+        jBAgregarEliminar.setText("Eliminar libros");
+
+        jTableDataLibros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableDataLibros);
+
+        jBAgregar.setText("Agregar Libros");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTNombreBiblio)
+                                            .addComponent(jTDireccion)
+                                            .addComponent(jTMetrosCuadrados)
+                                            .addComponent(jTUbiEdificio)
+                                            .addComponent(jCTipoBiblio, 0, 140, Short.MAX_VALUE))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jBAgregar)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(jBAgregarEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTNombreBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jCTipoBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTMetrosCuadrados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTUbiEdificio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBGuardar)
+                    .addComponent(jBAgregarEliminar)
+                    .addComponent(jBAgregar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
+        String nombreBiblio = jTNombreBiblio.getText(); 
+        String tipoBiblio = (String) jCTipoBiblio.getSelectedItem();
+        String direccion = jTDireccion.getText(); 
+        double metrosCuadrados = Double.parseDouble(jTMetrosCuadrados.getText()); 
+        String ubiEdi = jTUbiEdificio.getText(); 
+        
+        if(nombreBiblio.isEmpty() || tipoBiblio.isEmpty() || direccion.isEmpty() ||
+                ubiEdi.isEmpty()){
+                    JOptionPane.showMessageDialog(this, "No pueden haber campos vacíos");
+                    return;       
+        }
+        Edificio nuevoEdificio = new Edificio(ubiEdi, metrosCuadrados); 
+        Biblioteca nuevaBiblio = new Biblioteca(nombreBiblio, tipoBiblio, direccion, edificio);         
+        edificioCrud.agregarEdificio(nuevoEdificio);
+        bibliotecaCrud.agregarBiblioteca(nuevaBiblio);        
+        JOptionPane.showMessageDialog(this, "Informacion de la biblioteca guardada");
+        
+        jTNombreBiblio.setText("");
+        jCTipoBiblio.setSelectedIndex(0);
+        jTDireccion.setText("");
+        jTMetrosCuadrados.setText("");
+        jTUbiEdificio.setText("");
+        
+        
+    }//GEN-LAST:event_jBGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -90,8 +239,21 @@ public class MenuBibliotecario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JButton jBAgregar;
+    private javax.swing.JButton jBAgregarEliminar;
+    private javax.swing.JButton jBGuardar;
+    private javax.swing.JComboBox<String> jCTipoBiblio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTDireccion;
+    private javax.swing.JTextField jTMetrosCuadrados;
+    private javax.swing.JTextField jTNombreBiblio;
+    private javax.swing.JTextField jTUbiEdificio;
+    private javax.swing.JTable jTableDataLibros;
     // End of variables declaration//GEN-END:variables
 }

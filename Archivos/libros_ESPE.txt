@@ -1,0 +1,15 @@
+Fundamentos de Transferencia de Calor;Frank Kreith;L001;false
+Mecánica de Materiales Aplicada;James M. Gere;L002;false
+Dinámica de Sistemas de Control;Ogata Katsuhiko;L003;true
+Ingeniería de Procesos Químicos;Richard Turton;L004;true
+Diseño de Máquinas y Mecanismos;Robert L. Norton;L005;true
+Termodinámica en la Ingeniería Química;Yunus Cengel;L006;true
+Programación en Python para Ingenieros;Jason Cannon;L007;true
+Circuitos Eléctricos Básicos;Charles Alexander;L008;false
+Mecánica de Fluidos con Aplicaciones;Douglas C. Montgomery;L009;true
+Gestión de Proyectos de Ingeniería;Erik W. Larson;L010;true
+Ingeniería Ambiental Moderna;Benoit Cushman-Roisin;L011;true
+Simulación de Procesos Industriales;Andrés González;L012;true
+Ingeniería de Software Avanzada;Ian Sommerville;L013;true
+Modelado y Simulación con MATLAB;Brian Hahn;L014;true
+Diseño de Reactores Químicos;Octave Levenspiel;L015;true
